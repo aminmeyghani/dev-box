@@ -36,6 +36,9 @@ Vagrant.configure("2") do |config|
   # shared folder
    config.vm.synced_folder "shared_folder", "/home/vagrant/shared_folder"
 
+   # set ip address of the guest in the private network space
+    config.vm.network "private_network", type: "dhcp"
+
   # puppet
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = 'puppet/manifests'
