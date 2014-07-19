@@ -29,7 +29,6 @@ file { "/home/vagrant/puppetlog.txt":
     mode => 0777
 }
 
-
 # copy over the install node script.
 file {
   "/home/vagrant/scripts/install-node.sh":
@@ -72,7 +71,6 @@ class installgrunt {
   }
 }
 class { 'installgrunt': }
-
 
 # run update
 class apt_get_update {
@@ -123,10 +121,15 @@ class { 'install_mysql': }
 
 # --- PHP + APACHE ---------------------------------------------------------------  
 # exec { '/home/vagrant/scripts/install-lamp.sh': require => File['/home/vagrant/scripts/install-lamp.sh'] }
+class installlamp {
+  require apt_get_update
+  require install_mysql
+  exec { '/home/vagrant/scripts/install-lamp.sh': 
+    require => File['/home/vagrant/scripts/install-lamp.sh'] 
+  }
+}
+class { 'installlamp': }
 
-# --- GRUNT ---------------------------------------------------------------  
-
-# exec { '/home/vagrant/scripts/install-grunt.sh': require => File['/home/vagrant/scripts/install-grunt.sh'] }
 
 # --- PostgreSQL ---------------------------------------------------------------
 
