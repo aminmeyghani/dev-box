@@ -58,38 +58,31 @@ file {
   owner => "vagrant", group => "vagrant", mode => 0755;
 }
 
-# install node
-# exec { '/home/vagrant/scripts/install-node.sh': require => File['/home/vagrant/scripts/install-node.sh'] }
-
-
-
-
-
-class setone {
+class installnode {
   exec { '/home/vagrant/scripts/install-node.sh': 
     require => File['/home/vagrant/scripts/install-node.sh']
   }
 }
-class { 'setone': }
+class { 'installnode': }
 
-class setgrunt {
-  require setone
+class installgrunt {
+  require installnode
   exec { '/home/vagrant/scripts/install-grunt.sh': 
     require => File['/home/vagrant/scripts/install-grunt.sh']
   }
 }
-class { 'setgrunt': }
+class { 'installgrunt': }
 
 
 # run update
-# class apt_get_update {
-#   exec { 'apt-get -y update':
-#     unless => "test -e ${home}/.rvm"
-#   }
-# }
-# class { 'apt_get_update':
-#   stage => preinstall
-# }
+class apt_get_update {
+  exec { 'apt-get -y update':
+    unless => "test -e ${home}/.rvm"
+  }
+}
+class { 'apt_get_update':
+  stage => preinstall
+}
 
 # --- SQLite -------------------------------------------------------------------
 
@@ -99,34 +92,34 @@ class { 'setgrunt': }
 
 # --- MySQL --------------------------------------------------------------------
 
-# class install_mysql {
-#   class { 'mysql': }
+class install_mysql {
+  class { 'mysql': }
 
-#   class { 'mysql::server':
-#     config_hash => { 'root_password' => '' }
-#   }
+  class { 'mysql::server':
+    config_hash => { 'root_password' => '' }
+  }
 
-#   database { $ar_databases:
-#     ensure  => present,
-#     charset => 'utf8',
-#     require => Class['mysql::server']
-#   }
+  database { $ar_databases:
+    ensure  => present,
+    charset => 'utf8',
+    require => Class['mysql::server']
+  }
 
-#   database_user { 'rails@localhost':
-#     ensure  => present,
-#     require => Class['mysql::server']
-#   }
+  database_user { 'rails@localhost':
+    ensure  => present,
+    require => Class['mysql::server']
+  }
 
-#   database_grant { ['rails@localhost/activerecord_unittest', 'rails@localhost/activerecord_unittest2']:
-#     privileges => ['all'],
-#     require    => Database_user['rails@localhost']
-#   }
+  database_grant { ['rails@localhost/activerecord_unittest', 'rails@localhost/activerecord_unittest2']:
+    privileges => ['all'],
+    require    => Database_user['rails@localhost']
+  }
 
-#   package { 'libmysqlclient15-dev':
-#     ensure => installed
-#   }
-# }
-# class { 'install_mysql': }
+  package { 'libmysqlclient15-dev':
+    ensure => installed
+  }
+}
+class { 'install_mysql': }
 
 # --- PHP + APACHE ---------------------------------------------------------------  
 # exec { '/home/vagrant/scripts/install-lamp.sh': require => File['/home/vagrant/scripts/install-lamp.sh'] }
@@ -171,17 +164,17 @@ class { 'setgrunt': }
 
 # --- Packages -----------------------------------------------------------------
 
-# package { 'curl':
-#   ensure => installed
-# }
+package { 'curl':
+  ensure => installed
+}
 
-# package { 'build-essential':
-#   ensure => installed
-# }
+package { 'build-essential':
+  ensure => installed
+}
 
-# package { 'git-core':
-#   ensure => installed
-# }
+package { 'git-core':
+  ensure => installed
+}
 
 # Nokogiri dependencies.
 # package { ['libxml2', 'libxml2-dev', 'libxslt1-dev']:
