@@ -22,6 +22,22 @@ file { "/home/vagrant/shared_folder":
     ensure => "directory",
 }
 
+# set up the www symbolic link to /var/www
+file { "/home/vagrant/shared_folder/www":
+    ensure => "directory",
+}
+
+
+
+# set the symlink only if the apache script is ran.
+file { '/var/www':
+   ensure => 'link',
+   target => '/home/vagrant/shared_folder/www',
+   force => true,
+}
+
+
+
 # set up the log file
 file { "/home/vagrant/puppetlog.txt":
     ensure => "present",
@@ -176,6 +192,10 @@ package { 'build-essential':
 }
 
 package { 'git-core':
+  ensure => installed
+}
+
+package { 'vim':
   ensure => installed
 }
 
