@@ -38,10 +38,15 @@ Vagrant.configure("2") do |config|
 
    # set ip address of the guest in the private network space
     config.vm.network "private_network", type: "dhcp"
-
+  ## Provisioning 
+  #----------------
+  # If you want to use the shell script instead, uncomment it and comment or remove the puppet 
+  # configuration below.
   # puppet
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = 'puppet/manifests'
     puppet.module_path    = 'puppet/modules'
   end
+  # shell script
+  # config.vm.provision :shell, :path => "ssh-provision/provision.sh"
 end
