@@ -13,11 +13,10 @@ stage { 'preinstall':
 }
 
 # update and the pre-install folders.
+
 class update_and_preinstall {
 
-  # exec { 'Update Aptitude sources':
-  #   command => 'apt-get update'
-  # }
+  # apt get update.
   exec { 'apt-get update': }
 
   # create a the shell scripts directory.      
@@ -35,29 +34,28 @@ class update_and_preinstall {
       group => "vagrant",
       mode => 0777
   }
-  # add the rails install script
-  file { "/home/vagrant/scripts/install-rails.sh":
-    source => "/vagrant/puppet/files/install-rails.sh",
-    owner => "vagrant", group => "vagrant", mode => 0755;
-  }
+
   # install node.
   file {
     "/home/vagrant/scripts/install-node.sh":
     source => "/vagrant/puppet/files/install-node.sh",
     owner => "vagrant", group => "vagrant", mode => 0755;
   }
+
   # copy over the uninstall node scropt
   file {
     "/home/vagrant/scripts/uninstall-node.sh":
     source => "/vagrant/puppet/files/uninstall-node.sh",
     owner => "vagrant", group => "vagrant", mode => 0755;
   }
+
   # copy over the install grunt shell script.
   file {
     "/home/vagrant/scripts/install-grunt.sh":
     source => "/vagrant/puppet/files/install-grunt.sh",
     owner => "vagrant", group => "vagrant", mode => 0755;
   }
+  
   # set up the www symbolic link to /var/www
   file { "/home/vagrant/shared_folder/www":
       ensure => "directory",
